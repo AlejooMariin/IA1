@@ -1,18 +1,35 @@
 from pyswip import Prolog
+from app.services.conexiones_service import obtener_conexiones
 
 prolog = Prolog()
 prolog.consult("base_prolog/rutas.pl")
 
-def buscar_ruta(origen, destino):
 
-    consulta = f"ruta({origen},{destino})"
+def cargar_conexiones():
+    
+    list(
+        prolog.query(
+            "retractall(conexion(_,_,_))"
+        )
+    )
 
-    resultado = list(prolog.query(consulta))
+    conexiones = obtener_conexiones()
 
-    return len(resultado) > 0
+    for conexion in conexiones:
+
+        consulta = (
+            f"assertz(conexion("
+            f"{conexion['origen']},"
+            f"{conexion['destino']},"
+            f"{conexion['distancia']}"
+            f"))"
+        )
+
+        list(prolog.query(consulta))
 
 
 def obtener_rutas(origen, destino):
+    cargar_conexiones()
 
     consulta = f"ruta({origen},{destino},Ruta,Distancia)"
 
@@ -22,6 +39,7 @@ def obtener_rutas(origen, destino):
 
 
 def obtener_ruta_mas_corta(origen,destino):
+    cargar_conexiones()
 
     consulta = (
         f"ruta_mas_corta("

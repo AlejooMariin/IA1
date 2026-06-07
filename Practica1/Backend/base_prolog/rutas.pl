@@ -1,33 +1,82 @@
+:- dynamic conexion/3.
+
+carretera(X,Y,D):-
+    conexion(X,Y,D).
+
+carretera(X,Y,D):-
+    conexion(Y,X,D).
 
 
-conexion(ciudad_1, ciudad_2, 40).
-conexion(ciudad_1, ciudad_3, 70).
+ruta(Origen,Destino,Ruta,Distancia):-
+    buscar(
+        Origen,
+        Destino,
+        [Origen],
+        Ruta,
+        Distancia
+    ).
 
-conexion(ciudad_2, ciudad_4, 30).
-conexion(ciudad_2, ciudad_5, 90).
-
-conexion(ciudad_3, ciudad_5, 20).
-conexion(ciudad_3, ciudad_6, 60).
-
-conexion(ciudad_4, ciudad_7, 50).
-
-conexion(ciudad_5, ciudad_7, 40).
-conexion(ciudad_5, ciudad_8, 80).
-
-conexion(ciudad_6, ciudad_8, 30).
-
-conexion(ciudad_7, ciudad_9, 45).
-
-conexion(ciudad_8, ciudad_9, 20).
-conexion(ciudad_8, ciudad_10, 60).
-
-conexion(ciudad_9, ciudad_10, 25).
+buscar(
+    Destino,
+    Destino,
+    Visitadas,
+    Ruta,
+    0
+):-
+    reverse(Visitadas,Ruta).
 
 
+buscar(
+    Actual,
+    Destino,
+    Visitadas,
+    Ruta,
+    DistanciaTotal
+):-
 
-ruta(X,Y):- conexion(X,Y).
+    carretera(
+        Actual,
+        Siguiente,
+        Distancia
+    ),
 
-ruta(X,Y):-
-    conexion(X,Z),
-    ruta(Z,Y).
+    \+ member(
+        Siguiente,
+        Visitadas
+    ),
+
+    buscar(
+        Siguiente,
+        Destino,
+        [Siguiente|Visitadas],
+        Ruta,
+        DistanciaRestante
+    ),
+
+    DistanciaTotal is
+        Distancia + DistanciaRestante.
+
+
+ruta_mas_corta(
+    Origen,
+    Destino,
+    MejorRuta,
+    MenorDistancia
+):-
+
+    findall(
+        Distancia-Ruta,
+        ruta(
+            Origen,
+            Destino,
+            Ruta,
+            Distancia
+        ),
+        Lista
+    ),
+
+    sort(
+        Lista,
+        [MenorDistancia-MejorRuta|_]
+    ).
 

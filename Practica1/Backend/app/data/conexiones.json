@@ -1,0 +1,82 @@
+[
+    {
+        "origen": "ciudad_1",
+        "destino": "ciudad_2",
+        "distancia": 40
+    },
+    {
+        "origen": "ciudad_1",
+        "destino": "ciudad_3",
+        "distancia": 70
+    },
+    {
+        "origen": "ciudad_2",
+        "destino": "ciudad_4",
+        "distancia": 30
+    },
+    {
+        "origen": "ciudad_2",
+        "destino": "ciudad_5",
+        "distancia": 90
+    },
+    {
+        "origen": "ciudad_3",
+        "destino": "ciudad_5",
+        "distancia": 20
+    },
+    {
+        "origen": "ciudad_3",
+        "destino": "ciudad_6",
+        "distancia": 60
+    },
+    {
+        "origen": "ciudad_4",
+        "destino": "ciudad_7",
+        "distancia": 50
+    },
+    {
+        "origen": "ciudad_5",
+        "destino": "ciudad_7",
+        "distancia": 40
+    },
+    {
+        "origen": "ciudad_5",
+        "destino": "ciudad_8",
+        "distancia": 80
+    },
+    {
+        "origen": "ciudad_6",
+        "destino": "ciudad_8",
+        "distancia": 30
+    },
+    {
+        "origen": "ciudad_7",
+        "destino": "ciudad_9",
+        "distancia": 45
+    },
+    {
+        "origen": "ciudad_8",
+        "destino": "ciudad_9",
+        "distancia": 20
+    },
+    {
+        "origen": "ciudad_8",
+        "destino": "ciudad_10",
+        "distancia": 60
+    },
+    {
+        "origen": "ciudad_9",
+        "destino": "ciudad_10",
+        "distancia": 25
+    },
+    {
+        "origen": "ciudad_11",
+        "destino": "ciudad_12",
+        "distancia": "100"
+    },
+    {
+        "origen": "ciudad_12",
+        "destino": "ciudad_13",
+        "distancia": "150"
+    }
+]

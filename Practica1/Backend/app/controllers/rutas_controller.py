@@ -1,20 +1,9 @@
 
 
 from app.services.prolog_service import (
-    buscar_ruta,
     obtener_rutas,
     obtener_ruta_mas_corta
 )
-
-def consultar_ruta(origen, destino):
-
-    existe = buscar_ruta(origen, destino)
-
-    return {
-        "origen": origen,
-        "destino": destino,
-        "ruta_encontrada": existe
-    }
 
 def listar_rutas(origen,destino):
 

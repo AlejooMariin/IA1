@@ -1,0 +1,15 @@
+.container-table {
+  display: flex;
+  justify-content: center;
+  margin: 10px 0px 20px 0px; 
+}
+
+.tabla {
+  border-collapse: collapse;
+  min-width: 400px;
+  text-align: center;
+}
+
+.subtitle{
+  margin-top: 24px !important;
+}

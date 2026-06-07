@@ -1,0 +1,60 @@
+
+html,
+body,
+#root {
+    height: 100%;
+    margin: 0;
+}
+
+
+.footer {
+    margin-top: auto;
+    text-align: center;
+    padding: 15px;
+    border-top: 1px solid #ccc;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    padding: 20px;
+}
+
+input{
+    margin: 5px;
+    padding: 8px;
+}
+
+button{
+    margin: 5px;
+    padding: 8px;
+    cursor: pointer;
+   
+}
+
+table{
+    margin-top: 15px;
+    border-collapse: collapse;
+}
+
+th,td{
+    padding: 10px;
+}
+
+.tabs {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    margin-top: 24px !important;
+}
+
+.tabs button {
+    padding: 10px 20px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    margin-left: 10px !important;
+}
+
+.container{
+  min-height: 600px !important;
+}

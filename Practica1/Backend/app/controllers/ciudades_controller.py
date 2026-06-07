@@ -1,14 +1,23 @@
-def listar_ciudades():
+import json
+import os
 
-    return [
-        "ciudad-1",
-        "ciudad-2",
-        "ciudad-3",
-        "ciudad-4",
-        "ciudad-5",
-        "ciudad-6",
-        "ciudad-7",
-        "ciudad-8",
-        "ciudad-9",
-        "ciudad-10"
-    ]
+FILE_PATH = "app/data/ciudades.json"
+
+
+def listar_ciudades():
+    with open(FILE_PATH, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def agregar_ciudad(ciudad):
+    ciudades = listar_ciudades()
+
+    if ciudad not in ciudades:
+        ciudades.append(ciudad)
+
+        with open(FILE_PATH, "w", encoding="utf-8") as f:
+            json.dump(ciudades, f, indent=4)
+
+    return ciudades
+
+
