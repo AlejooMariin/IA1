@@ -1,102 +1,191 @@
-import React, { useState, useEffect } from "react";
+import React, {
+    useState,
+    useEffect
+} from "react";
+
 import {
-    obtenerSintomas,
-    crearSintoma,
-    actualizarSintoma,
-    eliminarSintoma
-} from "../../services/sintomas.service";
+    obtenerRecomendaciones,
+    crearRecomendacion,
+    actualizarRecomendacion,
+    eliminarRecomendacion
+} from "../../services/recomendaciones.service";
+
+import {
+    obtenerFallas
+} from "../../services/fallas.service";
+
+
 
 function Recomendaciones() {
 
-    const [nombre, setNombre] = useState("");
-    const [newnombre, setnewNombre] = useState("");
+    const [falla, setFalla] = useState("");
 
-    const [editando, setEditando] = useState(null);
+    const [
+        recomendacion,
+        setRecomendacion
+    ] = useState("");
 
-    const [sintomas, setSintomas] = useState([
-        "pantalla_azul",
-        "pantalla_negra",
-        "equipo_lento"
-    ]);
+    const [
+        fallaAnterior,
+        setFallaAnterior
+    ] = useState("");
 
-    const cargarSintomas = async () => {
+    const [
+        editando,
+        setEditando
+    ] = useState(null);
+
+    const [
+        recomendaciones,
+        setRecomendaciones
+    ] = useState([]);
+
+    const [
+        fallas,
+        setFallas
+    ] = useState([]);
+
+    const cargarRecomendaciones =
+        async () => {
 
         try {
 
             const data =
-                await obtenerSintomas();
+                await obtenerRecomendaciones();
 
-            setSintomas(data);
+            setRecomendaciones(
+                data
+            );
 
         } catch(error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
         }
     };
 
-    const guardar = async () => {
+    const cargarFallas =
+        async () => {
 
         try {
 
-            await crearSintoma(
-                nombre
+            const data =
+                await obtenerFallas();
+
+            setFallas(
+                data
             );
-
-            setNombre("");
-
-            cargarSintomas();
 
         } catch(error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
         }
     };
 
-    const actualizar = async () => {
+    const guardar =
+        async () => {
 
         try {
 
-            await actualizarSintoma(
-                newnombre,
-                nombre
+            await crearRecomendacion(
+                falla,
+                recomendacion
             );
-            setNombre("");
-            cargarSintomas();
+
+            setFalla("");
+            setRecomendacion("");
+
+            cargarRecomendaciones();
 
         } catch(error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
         }
     };
 
-    const eliminar = async (
-    nombre
-    ) => {
+    const actualizar =
+        async () => {
 
         try {
-            console.log(nombre)
-            await eliminarSintoma(
-                nombre
+
+            await actualizarRecomendacion(
+                fallaAnterior,
+                falla,
+                recomendacion
             );
 
-            cargarSintomas();
+            setEditando(
+                null
+            );
+
+            setFalla("");
+            setRecomendacion("");
+            setFallaAnterior("");
+
+            cargarRecomendaciones();
 
         } catch(error) {
 
-            console.error(error);
+            console.error(
+                error
+            );
+
         }
     };
 
-    const editar = async (item) => {
-         setNombre(item);
-         setnewNombre(item);
-         setEditando(item);
-        
+    const eliminar =
+        async (falla) => {
+
+        try {
+
+            await eliminarRecomendacion(
+                falla
+            );
+
+            cargarRecomendaciones();
+
+        } catch(error) {
+
+            console.error(
+                error
+            );
+
+        }
+    };
+
+    const editar =
+        (item) => {
+
+        setFalla(
+            item.falla
+        );
+
+        setFallaAnterior(
+            item.falla
+        );
+
+        setRecomendacion(
+            item.recomendacion
+        );
+
+        setEditando(
+            item.falla
+        );
     };
 
     useEffect(() => {
 
-        cargarSintomas();
+        cargarRecomendaciones();
+
+        cargarFallas();
 
     }, []);
 
@@ -106,16 +195,62 @@ function Recomendaciones() {
 
             <div className="card">
 
-                <h2>CRUD FALLOS</h2>
+                <h2>
+                    CRUD Recomendaciones
+                </h2>
 
-                <div className="form-group">
+                <div
+                    className="form-group"
+                >
 
-                    <label>Nombre</label>
+                    <label>
+                        Falla
+                    </label>
 
-                    <input
-                        value={nombre}
+                    <select
+                        value={falla}
                         onChange={(e) =>
-                            setNombre(
+                            setFalla(
+                                e.target.value
+                            )
+                        }
+                    >
+
+                        <option value="">
+                            Seleccione una falla
+                        </option>
+
+                        {
+                            fallas.map(
+                                (item,index) => (
+
+                                    <option
+                                        key={index}
+                                        value={item}
+                                    >
+                                        {item}
+                                    </option>
+                                )
+                            )
+                        }
+
+                    </select>
+
+                </div>
+
+                <div
+                    className="form-group"
+                >
+
+                    <label>
+                        Recomendación
+                    </label>
+
+                    <textarea
+                        rows="5"
+                        value={recomendacion}
+                        onChange={(e) =>
+                            setRecomendacion(
                                 e.target.value
                             )
                         }
@@ -123,18 +258,25 @@ function Recomendaciones() {
 
                 </div>
 
-                <button onClick={() => {
-                        if (editando !== null) {
+                <button
+                    onClick={() => {
+
+                        if(
+                            editando !== null
+                        ){
                             actualizar();
-                        } else {
+                        }
+                        else{
                             guardar();
                         }
-                    }}>
+
+                    }}
+                >
 
                     {
                         editando !== null
-                            ? "Actualizar"
-                            : "Guardar"
+                        ? "Actualizar"
+                        : "Guardar"
                     }
 
                 </button>
@@ -142,59 +284,79 @@ function Recomendaciones() {
                 <br />
                 <br />
 
-                <div className="lista-sintomas">
+                <div
+                    className="lista-sintomas"
+                >
 
                     {
-                        sintomas.map(
-                            (item, index) => (
+                        recomendaciones.map(
+                            (
+                                item,
+                                index
+                            ) => (
 
-                                <div
-                                    key={index}
-                                    className="sintoma-item"
-                                >
+                            <div
+                                key={index}
+                                className="sintoma-item"
+                            >
 
-                                    <span>
-                                        {item}
-                                    </span>
+                                <div>
 
-                                    <div
-                                        style={{
-                                            display: "flex",
-                                            gap: "5px"
-                                        }}
-                                    >
+                                    <strong>
+                                        {
+                                            item.falla
+                                        }
+                                    </strong>
 
-                                        <button
-                                            className="btn-editar"
-                                            onClick={() =>
-                                                editar(item)
-                                            }
-                                        >
+                                    <br />
 
-                                            <span className="material-symbols-outlined">
-                                                edit
-                                            </span>
-
-                                        </button>
-
-                                        <button
-                                            className="btn-eliminar"
-                                            onClick={() =>
-                                                eliminar(item)
-                                            }
-                                        >
-
-                                            <span className="material-symbols-outlined">
-                                                delete
-                                            </span>
-
-                                        </button>
-
-                                    </div>
+                                    {
+                                        item.recomendacion
+                                    }
 
                                 </div>
-                            )
-                        )
+
+                                <div
+                                    style={{
+                                        display:"flex",
+                                        gap:"5px"
+                                    }}
+                                >
+
+                                    <button
+                                        className="btn-editar"
+                                        onClick={() =>
+                                            editar(
+                                                item
+                                            )
+                                        }
+                                    >
+
+                                        <span className="material-symbols-outlined">
+                                            edit
+                                        </span>
+
+                                    </button>
+
+                                    <button
+                                        className="btn-eliminar"
+                                        onClick={() =>
+                                            eliminar(
+                                                item.falla
+                                            )
+                                        }
+                                    >
+
+                                        <span className="material-symbols-outlined">
+                                            delete
+                                        </span>
+
+                                    </button>
+
+                                </div>
+
+                            </div>
+                        ))
                     }
 
                 </div>

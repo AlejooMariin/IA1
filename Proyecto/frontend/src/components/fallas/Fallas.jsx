@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-    obtenerSintomas,
-    crearSintoma,
-    actualizarSintoma,
-    eliminarSintoma
-} from "../../services/sintomas.service";
+    obtenerFallas,
+    crearFalla,
+    actualizarFalla,
+    eliminarFalla
+} from "../../services/fallas.service";
 
 function Fallas() {
 
@@ -13,20 +13,16 @@ function Fallas() {
 
     const [editando, setEditando] = useState(null);
 
-    const [sintomas, setSintomas] = useState([
-        "pantalla_azul",
-        "pantalla_negra",
-        "equipo_lento"
-    ]);
+    const [fallas, setFallas] = useState([]);
 
-    const cargarSintomas = async () => {
+    const cargarFallas = async () => {
 
         try {
 
             const data =
-                await obtenerSintomas();
+                await obtenerFallas();
 
-            setSintomas(data);
+            setFallas(data);
 
         } catch(error) {
 
@@ -38,13 +34,13 @@ function Fallas() {
 
         try {
 
-            await crearSintoma(
+            await crearFalla(
                 nombre
             );
 
             setNombre("");
 
-            cargarSintomas();
+            cargarFallas();
 
         } catch(error) {
 
@@ -56,12 +52,12 @@ function Fallas() {
 
         try {
 
-            await actualizarSintoma(
+            await actualizarFalla(
                 newnombre,
                 nombre
             );
             setNombre("");
-            cargarSintomas();
+            cargarFallas();
 
         } catch(error) {
 
@@ -75,11 +71,11 @@ function Fallas() {
 
         try {
             console.log(nombre)
-            await eliminarSintoma(
+            await eliminarFalla(
                 nombre
             );
 
-            cargarSintomas();
+            cargarFallas();
 
         } catch(error) {
 
@@ -96,7 +92,7 @@ function Fallas() {
 
     useEffect(() => {
 
-        cargarSintomas();
+        cargarFallas();
 
     }, []);
 
@@ -106,7 +102,7 @@ function Fallas() {
 
             <div className="card">
 
-                <h2>CRUD FALLOS</h2>
+                <h2>CRUD Síntomas</h2>
 
                 <div className="form-group">
 
@@ -145,7 +141,7 @@ function Fallas() {
                 <div className="lista-sintomas">
 
                     {
-                        sintomas.map(
+                        fallas.map(
                             (item, index) => (
 
                                 <div
