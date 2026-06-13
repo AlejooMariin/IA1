@@ -1,9 +1,12 @@
 import re
 
-ARCHIVO = "base_prolog/auxiliar.pl"
+ARCHIVO = "base_prolog/diagnostico.pl"
+ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
 
 def get_fallas_service():
+
+    contenido = ""
 
     with open(
         ARCHIVO,
@@ -11,14 +14,24 @@ def get_fallas_service():
         encoding="utf-8"
     ) as archivo:
 
-        contenido = archivo.read()
+        contenido += archivo.read()
+
+    with open(
+        ARCHIVOAUX,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+
+        contenido += "\n" + archivo.read()
 
     fallas = re.findall(
         r"falla\((.*?)\)\.",
         contenido
     )
 
-    return fallas
+    return list(
+        dict.fromkeys(fallas)
+    )
 
 
 def crear_falla_service(

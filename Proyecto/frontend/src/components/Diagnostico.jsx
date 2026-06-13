@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
+import {
+    obtenerSintomas
+} from "../services/sintomas.service";
 
 function Diagnostico() {
 
@@ -6,14 +9,30 @@ function Diagnostico() {
 
     const [sintomasSeleccionados, setSintomasSeleccionados] = useState([]);
 
-    const sintomas = [
-        "pantalla_azul",
-        "pantalla_negra",
-        "equipo_lento",
-        "temperatura_alta",
-        "sin_audio",
-        "usb_no_reconoce"
-    ];
+    const [sintomas, setSintomas] = useState([]);
+
+    const [diagnostico, setDiagnostico] = useState([]);
+
+    const cargarSintomas =
+        async () => {
+
+            try {
+
+                const data =
+                    await obtenerSintomas();
+
+                setSintomas(
+                    data
+                );
+
+            } catch(error) {
+
+                console.error(
+                    error
+                );
+
+            }
+        };
 
     const agregarSintoma = () => {
 
@@ -45,6 +64,14 @@ function Diagnostico() {
             )
         );
     };
+
+
+    useEffect(() => {
+
+        cargarSintomas();
+
+    }, []);
+
 
     return (
          <div className="container">

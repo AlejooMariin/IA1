@@ -1,9 +1,12 @@
 import re
 
-ARCHIVO = "base_prolog/auxiliar.pl"
+ARCHIVO = "base_prolog/diagnostico.pl"
+ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
 
 def get_sintomas_service():
+
+    sintomas = []
 
     with open(
         ARCHIVO,
@@ -11,14 +14,37 @@ def get_sintomas_service():
         encoding="utf-8"
     ) as archivo:
 
-        contenido = archivo.read()
+        sintomas.extend(
+            re.findall(
+                r"sintoma\((.*?)\)\.",
+                archivo.read()
+            )
+        )
 
-    sintomas = re.findall(
-        r"sintoma\((.*?)\)\.",
-        contenido
-    )
+    with open(
+        ARCHIVOAUX,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
 
-    return sintomas
+        sintomas.extend(
+            re.findall(
+                r"sintoma\((.*?)\)\.",
+                archivo.read()
+            )
+        )
+
+    sintomas_unicos = []
+
+    for sintoma in sintomas:
+
+        if sintoma not in sintomas_unicos:
+
+            sintomas_unicos.append(
+                sintoma
+            )
+
+    return sintomas_unicos
 
 
 def crear_sintoma_service(

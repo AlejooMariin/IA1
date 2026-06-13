@@ -3,7 +3,13 @@ import re
 ARCHIVO = "base_prolog/auxiliar.pl"
 
 
+ARCHIVO = "base_prolog/diagnostico.pl"
+ARCHIVOAUX = "base_prolog/auxiliar.pl"
+
+
 def get_recomendaciones_service():
+
+    contenido = ""
 
     with open(
         ARCHIVO,
@@ -11,21 +17,41 @@ def get_recomendaciones_service():
         encoding="utf-8"
     ) as archivo:
 
-        contenido = archivo.read()
+        contenido += archivo.read()
 
-    recomendaciones = re.findall(
+    with open(
+        ARCHIVOAUX,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+
+        contenido += "\n" + archivo.read()
+
+    coincidencias = re.findall(
         r"recomendacion\((.*?),\s*'(.*?)'\)\.",
         contenido
     )
 
-    return [
-        {
-            "falla": falla,
-            "recomendacion": recomendacion
-        }
-        for falla, recomendacion
-        in recomendaciones
-    ]
+    recomendaciones = []
+
+    fallas_vistas = set()
+
+    for falla, recomendacion in coincidencias:
+
+        if falla not in fallas_vistas:
+
+            recomendaciones.append(
+                {
+                    "falla": falla,
+                    "recomendacion": recomendacion
+                }
+            )
+
+            fallas_vistas.add(
+                falla
+            )
+
+    return recomendaciones
 
 
 def crear_recomendacion_service(
