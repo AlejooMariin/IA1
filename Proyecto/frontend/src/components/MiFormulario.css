@@ -19,7 +19,8 @@
 }
 
 .card {
-  width: 450px;
+  width: 900px;
+  max-width: 95%;
   background: #ffffff;
   border-radius: 24px;
   padding: 35px;
@@ -130,4 +131,98 @@ textarea:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.15);
+}
+
+
+table{
+
+  width:100%;
+  border-collapse: collapse;
+}
+
+table th,
+table td{
+
+  padding:12px;
+  border:1px solid #e2e8f0;
+}
+
+.btn-eliminar {
+
+    width: 36px !important;
+    min-width: 36px;
+
+    height: 36px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #dc2626;
+
+    cursor: pointer;
+
+    transition: all 0.2s ease;
+}
+
+.btn-eliminar:hover {
+
+    transform: scale(1.1);
+
+    box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
+}
+
+.btn-eliminar .material-symbols-outlined {
+
+    font-size: 18px;
+
+    color: white;
+}
+
+.sintoma-item {
+
+    display: flex;
+
+    justify-content: space-between;
+
+    align-items: center;
+
+    padding: 10px 15px;
+
+    margin-bottom: 8px;
+
+    background: white;
+
+    border-radius: 12px;
+
+    border-left: 5px solid #667eea;
+}
+
+
+.btn-editar {
+
+    width: 36px !important;
+    min-width: 36px;
+
+    height: 36px;
+
+    padding: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #2563eb;
+}
+
+.btn-editar .material-symbols-outlined {
+
+    color: white;
+    font-size: 18px;
 }

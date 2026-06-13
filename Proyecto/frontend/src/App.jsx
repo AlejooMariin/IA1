@@ -1,59 +1,56 @@
-import MiFormulario from "./components/MiFormulario";
-import { useState, useEffect } from "react";
-import api from "./services/api";
+import { useState } from "react";
+
+import Login from "./components/Login";
+import Navbar from "./components/Navbar";
+
+import Sintomas from "./components/sintomas/Sintomas";
+import Fallas from "./components/fallas/Fallas";
+import Recomendaciones from "./components/recomendaciones/Recomendaciones";
+import Diagnostico from "./components/Diagnostico";
+import Historial from "./components/Historial";
 
 function App() {
 
-    const [ciudades, setCiudades] = useState([]);
-    const [tabActiva, setTabActiva] = useState("inicio");
+    const [logueado, setLogueado] = useState(false);
+    const [modulo, setModulo] = useState("diagnostico");
 
-    const cargarSintomas = async () => {
-        console.log("Carga de informacion");
+    if (!logueado) {
+        return <Login onLogin={() => setLogueado(true)} />;
+    }
 
-        try {
+    const renderModulo = () => {
 
-            const response = await api.get("/ciudades");
+        switch (modulo) {
 
-            console.log("carga de info", response.data);
+            case "sintomas":
+                return <Sintomas />;
 
-            setCiudades(response.data);
+            case "fallas":
+                return <Fallas />;
 
-        } catch (error) {
+            case "recomendaciones":
+                return <Recomendaciones />;
 
-            console.error(error);
+            case "historial":
+                return <Historial />;
 
-            alert("Error al cargar ciudades");
+            default:
+                return <Diagnostico />;
         }
     };
 
-    useEffect(() => {
-
-    cargarSintomas();
-
-        
-    }, []);
-
-
     return (
+        <div>
 
-    <div>
-      <div style={{ minHeight: "600px" }}>
-            <h1>           Proyecto Fase 1        </h1>
+            <Navbar
+                setModulo={setModulo}
+                onLogout={() => setLogueado(false)}
+            />
 
-            <MiFormulario></MiFormulario>
+            {renderModulo()}
+
         </div>
-
-        <footer className="footer">
-            <p>
-                © {new Date().getFullYear()} Sistema de Rutas IA1 - Practica 1 -
-            </p>
-            <p>
-                Universidad de San Carlos de Guatemala - Inteligencia Artificial 1 - {new Date().toLocaleDateString()}
-            </p>
-            <p> José Alejandro Grande Marín - 201602855 </p>
-        </footer>
-    </div>
-);
+    );
 }
 
 export default App;
