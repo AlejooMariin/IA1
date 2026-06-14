@@ -23,14 +23,12 @@ def crear_recomendacion(
 
 
 def actualizar_recomendacion(
-    falla_anterior,
-    falla_nueva,
+    falla,
     recomendacion
 ):
 
     return actualizar_recomendacion_service(
-        falla_anterior,
-        falla_nueva,
+        falla,
         recomendacion
     )
 

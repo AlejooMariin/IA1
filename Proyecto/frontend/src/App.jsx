@@ -8,6 +8,7 @@ import Fallas from "./components/fallas/Fallas";
 import Recomendaciones from "./components/recomendaciones/Recomendaciones";
 import Diagnostico from "./components/Diagnostico";
 import Historial from "./components/Historial";
+import DiagnosticoCrud from "./components/diagnostico/Diagnosticocrud";
 
 function App() {
 
@@ -30,6 +31,9 @@ function App() {
 
             case "recomendaciones":
                 return <Recomendaciones />;
+
+            case "cruddiagnostico":
+                return <DiagnosticoCrud />;
 
             case "historial":
                 return <Historial />;

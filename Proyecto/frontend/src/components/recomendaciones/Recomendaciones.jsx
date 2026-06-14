@@ -117,7 +117,6 @@ function Recomendaciones() {
         try {
 
             await actualizarRecomendacion(
-                fallaAnterior,
                 falla,
                 recomendacion
             );

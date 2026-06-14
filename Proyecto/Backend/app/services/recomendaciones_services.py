@@ -6,52 +6,36 @@ ARCHIVO = "base_prolog/auxiliar.pl"
 ARCHIVO = "base_prolog/diagnostico.pl"
 ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
+import re
 
 def get_recomendaciones_service():
 
-    contenido = ""
+    def parse(texto):
+        return re.findall(
+            r"recomendacion\s*\(\s*([a-zA-Z0-9_]+)\s*,\s*'([^']*)'\s*\)\s*\.",
+            texto
+        )
 
-    with open(
-        ARCHIVO,
-        "r",
-        encoding="utf-8"
-    ) as archivo:
+    datos = {}
+    
+    try:
+        with open(ARCHIVO, "r", encoding="utf-8") as f:
+            for k, v in parse(f.read()):
+                datos[k] = v
+    except:
+        pass
 
-        contenido += archivo.read()
+    try:
+        with open(ARCHIVOAUX, "r", encoding="utf-8") as f:
+            for k, v in parse(f.read()):
+                datos[k] = v
+    except:
+        pass
 
-    with open(
-        ARCHIVOAUX,
-        "r",
-        encoding="utf-8"
-    ) as archivo:
-
-        contenido += "\n" + archivo.read()
-
-    coincidencias = re.findall(
-        r"recomendacion\((.*?),\s*'(.*?)'\)\.",
-        contenido
-    )
-
-    recomendaciones = []
-
-    fallas_vistas = set()
-
-    for falla, recomendacion in coincidencias:
-
-        if falla not in fallas_vistas:
-
-            recomendaciones.append(
-                {
-                    "falla": falla,
-                    "recomendacion": recomendacion
-                }
-            )
-
-            fallas_vistas.add(
-                falla
-            )
-
-    return recomendaciones
+    return [
+        {"falla": k, "recomendacion": v}
+        for k, v in datos.items()
+    ]
 
 
 def crear_recomendacion_service(
@@ -60,7 +44,7 @@ def crear_recomendacion_service(
 ):
 
     with open(
-        ARCHIVO,
+        ARCHIVOAUX,
         "a",
         encoding="utf-8"
     ) as archivo:
@@ -108,45 +92,43 @@ def eliminar_recomendacion_service(
     }
 
 
-def actualizar_recomendacion_service(
-    falla_anterior,
-    falla_nueva,
-    recomendacion
-):
+def actualizar_recomendacion_service(falla, nueva_recomendacion):
 
-    with open(
-        ARCHIVO,
-        "r",
-        encoding="utf-8"
-    ) as archivo:
+    patron = rf"recomendacion\s*\(\s*{falla}\s*,\s*'([^']*)'\s*\)\s*\."
 
-        contenido = archivo.read()
+    def reemplazar(file):
 
-    patron = (
-        rf"recomendacion\({falla_anterior},\s*'.*?'\)\."
-    )
+        try:
+            with open(file, "r", encoding="utf-8") as f:
+                contenido = f.read()
+        except:
+            return None, False
 
-    reemplazo = (
-        f"recomendacion({falla_nueva}, '{recomendacion}')."
-    )
-
-    contenido = re.sub(
-        patron,
-        reemplazo,
-        contenido
-    )
-
-    with open(
-        ARCHIVO,
-        "w",
-        encoding="utf-8"
-    ) as archivo:
-
-        archivo.write(
+        nuevo = re.sub(
+            patron,
+            f"recomendacion({falla}, '{nueva_recomendacion}').",
             contenido
         )
 
-    return {
-        "mensaje":
-        "Recomendacion actualizada"
-    }
+        return nuevo, nuevo != contenido
+
+    nuevo_aux, cambio_aux = reemplazar(ARCHIVOAUX)
+
+    if cambio_aux:
+
+        with open(ARCHIVOAUX, "w", encoding="utf-8") as f:
+            f.write(nuevo_aux)
+
+        return {"mensaje": "Actualizado en auxiliar"}
+
+    nuevo_orig, cambio_orig = reemplazar(ARCHIVO)
+
+    if cambio_orig:
+
+        # copiar al auxiliar
+        with open(ARCHIVOAUX, "a", encoding="utf-8") as f:
+            f.write(f"\nrecomendacion({falla}, '{nueva_recomendacion}').\n")
+
+        return {"mensaje": "Copiado desde original y actualizado en auxiliar"}
+
+    return {"mensaje": "No se encontró la recomendación"}

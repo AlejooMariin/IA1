@@ -2,16 +2,20 @@ import React, { useState,useEffect } from "react";
 import {
     obtenerSintomas
 } from "../services/sintomas.service";
+import {obtenerDiagnosticoRapido, obtenerDiagnosticoCompleto} from "../services/diagnostico.service";
 
 function Diagnostico() {
 
     const [sintomaSeleccionado, setSintomaSeleccionado] = useState("");
 
     const [sintomasSeleccionados, setSintomasSeleccionados] = useState([]);
+    const [diagnosticosintomasSeleccionados, setDiagnosSintomasSeleccionados] = useState([]);
 
     const [sintomas, setSintomas] = useState([]);
 
     const [diagnostico, setDiagnostico] = useState([]);
+
+    const [diagnoRapido, setDiagnoRapido] = useState(false);
 
     const cargarSintomas =
         async () => {
@@ -65,6 +69,83 @@ function Diagnostico() {
         );
     };
 
+    const getDiagnosticoRapido = async ()=>{
+
+        try {
+            
+                 const resultadosFinales = [];
+
+                for (let i = 0; i < sintomasSeleccionados.length; i++) {
+
+                    const sintoma = sintomasSeleccionados[i];
+                    console.log('--> getDiagnosticoRapido --<',sintoma);
+
+                    const data =
+                        await obtenerDiagnosticoRapido(
+                            sintoma
+                        );
+
+                    for (let j = 0; j < data.length; j++) {
+
+                        resultadosFinales.push({
+                            sintoma: sintoma,
+                            diagnostico: data[j].Diagnostico,
+                            recomendacion: data[j].Recomendacion
+                        });
+                    }
+                }
+
+                setDiagnosSintomasSeleccionados(resultadosFinales);
+
+            } catch(error) {
+
+                console.error(
+                    error
+                );
+
+            }
+    }
+
+    const getDiagnosticoCompleto = async ()=>{
+
+        try {
+            
+
+                 const resultadosFinales = [];
+
+                for (let i = 0; i < sintomasSeleccionados.length; i++) {
+
+                    const sintoma = sintomasSeleccionados[i];
+                    console.log('--> getDiagnosticoCompleto--<',sintoma);
+                    const data =
+                        await obtenerDiagnosticoCompleto(
+                            sintoma
+                        );
+
+                    for (let j = 0; j < data.length; j++) {
+
+                        resultadosFinales.push({
+                            sintoma: sintoma,
+                            diagnostico: data[j].Diagnostico,
+                            recomendacion: data[j].Recomendacion
+                        });
+                    }
+                }
+
+                setDiagnosSintomasSeleccionados(resultadosFinales);
+
+            } catch(error) {
+
+                console.error(
+                    error
+                );
+
+            }
+    }
+
+    const clickShowAll=() =>{
+        setShowAllRoutes()
+    };
 
     useEffect(() => {
 
@@ -167,10 +248,26 @@ function Diagnostico() {
             </div>
 
             <div>
-                <button >
+                <label>
+                        <input
+                            type="checkbox"
+                            checked={diagnoRapido}
+                            onChange={(e) => setDiagnoRapido(e.target.checked)}
+                        />
+                        Diagnostico Rapido
+                </label>
+                
+                <button onClick={() => {
+                        if (diagnoRapido) {
+                            getDiagnosticoRapido();
+                        } else {
+                            getDiagnosticoCompleto();
+                        }
+                    }} >
                     Consultar
                 </button> *
             </div>
+
             <div className="form-group">
                 
 
@@ -181,7 +278,7 @@ function Diagnostico() {
                 <textarea
                     readOnly
                     value={JSON.stringify(
-                        sintomasSeleccionados,
+                        diagnosticosintomasSeleccionados,
                         null,
                         2
                     )}

@@ -22,6 +22,10 @@ function Navbar({ setModulo, onLogout }) {
                 Recomendaciones
             </button>
 
+            <button onClick={() => setModulo("cruddiagnostico")}>
+                CRUD Diagnostico
+            </button>
+
             <button onClick={() => setModulo("historial")}>
                 Historial
             </button>

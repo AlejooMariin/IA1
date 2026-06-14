@@ -1,4 +1,12 @@
-:- dynamic conexion/3.
+:- dynamic sintoma/1.
+:- dynamic falla/1.
+:- dynamic recomendacion/2.
+:- dynamic diagnostico/2.
+
+:- multifile sintoma/1.
+:- multifile falla/1.
+:- multifile recomendacion/2.
+:- multifile diagnostico/2.
 
 
 sintoma(pantalla_negra).

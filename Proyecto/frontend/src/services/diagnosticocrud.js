@@ -1,26 +1,28 @@
 import api from "./api";
 
-export const obtenerRecomendaciones = async () => {
+// OBTENER
+export const obtenerDiagnosticos = async () => {
 
     const response = await api.get(
-        "/recomendaciones"
+        "/diagnosticos"
     );
 
     return response.data;
 };
 
-export const crearRecomendacion = async (
-    falla,
-    recomendacion
+// CREAR
+export const crearDiagnostico = async (
+    nombre,
+    sintomas
 ) => {
 
     const response = await api.post(
-        "/recomendaciones",
+        "/diagnosticos",
         null,
         {
             params: {
-                falla,
-                recomendacion
+                nombre,
+                sintomas
             }
         }
     );
@@ -28,18 +30,21 @@ export const crearRecomendacion = async (
     return response.data;
 };
 
-export const actualizarRecomendacion = async (
-    falla,
-    recomendacion
+// ACTUALIZAR
+export const actualizarDiagnostico = async (
+    anterior,
+    nuevo,
+    sintomas
 ) => {
 
     const response = await api.put(
-        "/recomendaciones",
+        "/diagnosticos",
         null,
         {
             params: {
-                falla,
-                recomendacion
+                anterior,
+                nuevo,
+                sintomas
             }
         }
     );
@@ -47,15 +52,16 @@ export const actualizarRecomendacion = async (
     return response.data;
 };
 
-export const eliminarRecomendacion = async (
-    falla
+// ELIMINAR
+export const eliminarDiagnostico = async (
+    nombre
 ) => {
 
     const response = await api.delete(
-        "/recomendaciones",
+        "/diagnosticos",
         {
             params: {
-                falla
+                nombre
             }
         }
     );

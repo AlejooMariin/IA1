@@ -33,14 +33,13 @@ def crear(
 
 @router.put("")
 def actualizar(
-    falla_anterior: str,
-    falla_nueva: str,
+
+    falla: str,
     recomendacion: str
 ):
 
     return actualizar_recomendacion(
-        falla_anterior,
-        falla_nueva,
+        falla,
         recomendacion
     )
 
