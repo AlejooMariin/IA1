@@ -1,5 +1,5 @@
 import re
-
+from app.services.notification_service import notificar
 ARCHIVO = "base_prolog/diagnostico.pl"
 ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
@@ -60,6 +60,10 @@ def crear_sintoma_service(
         archivo.write(
             f"\nsintoma({nombre}).\n"
         )
+    notificar(
+            "Crear Síntoma",
+            nombre
+        )
 
     return {
         "mensaje":
@@ -93,6 +97,10 @@ def eliminar_sintoma_service(
                 archivo.write(
                     linea
                 )
+    notificar(
+        "Eliminar Síntoma",
+        nombre
+    )
 
     return {
         "mensaje":
@@ -128,6 +136,11 @@ def actualizar_sintoma_service(
             contenido
         )
 
+    notificar(
+        "Actualizar Síntoma",
+        f"{anterior} → {nuevo}"
+    )
+    
     return {
         "mensaje":
         "Sintoma actualizado"

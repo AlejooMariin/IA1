@@ -1,5 +1,5 @@
 import re
-
+from app.services.notification_service import notificar
 ARCHIVO = "base_prolog/diagnostico.pl"
 ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
@@ -40,6 +40,11 @@ def crear_diagnostico_service(nombre, sintomas):
 
     with open(ARCHIVOAUX, "a", encoding="utf-8") as f:
         f.write(regla)
+    
+    notificar(
+        "Crear Diagnostico",
+        nombre, sintomas
+    )
 
     return {"mensaje": "Diagnóstico creado"}
 
@@ -54,7 +59,10 @@ def eliminar_diagnostico_service(nombre):
 
             if f", {nombre}" not in linea:
                 f.write(linea)
-
+    notificar(
+        "Elimina Diagnostico",
+        nombre
+    )
     return {"mensaje": "Diagnóstico eliminado"}
 
 def actualizar_diagnostico_service(nombre_anterior, nombre_nuevo, sintomas):

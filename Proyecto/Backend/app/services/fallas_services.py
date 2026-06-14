@@ -1,5 +1,5 @@
 import re
-
+from app.services.notification_service import notificar
 ARCHIVO = "base_prolog/diagnostico.pl"
 ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
@@ -47,6 +47,11 @@ def crear_falla_service(
         archivo.write(
             f"\nfalla({nombre}).\n"
         )
+    
+    notificar(
+        "Crear Falla",
+        nombre
+    )
 
     return {
         "mensaje":
@@ -82,6 +87,11 @@ def eliminar_falla_service(
                     linea
                 )
 
+    notificar(
+        "Eliminar Falla",
+        nombre
+    )
+
     return {
         "mensaje":
         "Falla eliminada"
@@ -115,6 +125,11 @@ def actualizar_falla_service(
         archivo.write(
             contenido
         )
+
+    notificar(
+        "Actualizar Falla",
+        f"{anterior} → {nuevo}"
+    )
 
     return {
         "mensaje":

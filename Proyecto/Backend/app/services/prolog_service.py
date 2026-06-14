@@ -1,5 +1,5 @@
 from pyswip import Prolog
-
+from app.services.notification_service import notificar
 prolog = Prolog()
 
 def cargar_prolog():
@@ -31,6 +31,10 @@ def get_diagnostico_completo_service(sintoma):
 
     resultados = list(prolog.query(consulta))
 
+    notificar(
+        "Consulta Diagnóstico completo",
+        f"Síntoma: {sintoma}"
+    )
     return resultados
 
 
@@ -53,5 +57,9 @@ def get_diagnostico_rapido_service(sintoma):
 
     resultado = list(prolog.query(consulta))
 
+    notificar(
+        "Consulta Diagnóstico Rapido",
+        f"Síntoma: {sintoma}"
+    )
     return resultado
     # python -m uvicorn app.main:app --reload

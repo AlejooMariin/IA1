@@ -1,12 +1,9 @@
 import re
-
-ARCHIVO = "base_prolog/auxiliar.pl"
-
+from app.services.notification_service import notificar
 
 ARCHIVO = "base_prolog/diagnostico.pl"
 ARCHIVOAUX = "base_prolog/auxiliar.pl"
 
-import re
 
 def get_recomendaciones_service():
 
@@ -52,6 +49,11 @@ def crear_recomendacion_service(
         archivo.write(
             f"\nrecomendacion({falla}, '{recomendacion}').\n"
         )
+    notificar(
+        "Crear Recomendación",
+        falla,
+        recomendacion
+    )
 
     return {
         "mensaje":
@@ -85,6 +87,11 @@ def eliminar_recomendacion_service(
                 archivo.write(
                     linea
                 )
+    
+    notificar(
+        "Elimina Recomendación",
+        falla
+    )
 
     return {
         "mensaje":

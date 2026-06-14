@@ -6,6 +6,10 @@ from app.routes.sintomas_api import router as sintomas_router
 from app.routes.fallas_api import router as fallas_router
 from app.routes.recomendaciones_api import router as recomendaciones_router
 from app.routes.diagnosticocrud_api import router as diagnosticocrud_router 
+from dotenv import load_dotenv
+
+load_dotenv()
+
 app = FastAPI()
 
 app.add_middleware(
