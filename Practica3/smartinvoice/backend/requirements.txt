@@ -1,0 +1,17 @@
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+python-jose[cryptography]
+python-multipart
+passlib[bcrypt]
+python-jose
+opencv-python
+easyocr
+pillow
+pandas
+openpyxl
+reportlab
+selenium
+python-dotenv
+email-validator
