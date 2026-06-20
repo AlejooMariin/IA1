@@ -4,6 +4,8 @@ import os
 import shutil
 import traceback
 
+from typing import List
+from app.models.factura import Factura
 
 
 from app.utils.dependencies import get_db
@@ -22,6 +24,8 @@ from app.schemas.ocr import OCRResponse
 from app.services import factura_service
 from app.services import ocr_service
 from app.services import bitacora_service
+
+from app.rpa.factura_rpa import ejecutar_rpa_facturas
 
 from app.utils.extractors import (
     extraer_numero_factura,
@@ -197,3 +201,121 @@ def procesar_y_crear(
             status_code=500,
             detail=str(e)
         )
+
+
+
+#
+# RPA
+@router.post("/rpa/batch-crear")
+def crear_facturas_en_lote(
+    archivos: List[UploadFile] = File(...),
+    db: Session = Depends(get_db),
+    current_user: Usuario = Depends(get_current_user)
+):
+
+    resultados = []
+
+    os.makedirs("uploads/facturas", exist_ok=True)
+
+    for archivo in archivos:
+
+        try:
+            # =========================
+            # 1. VALIDAR EXTENSIÓN
+            # =========================
+            extension = os.path.splitext(archivo.filename)[1].lower()
+
+            if extension not in [".pdf", ".png", ".jpg", ".jpeg"]:
+                resultados.append({
+                    "archivo": archivo.filename,
+                    "estado": "ERROR",
+                    "error": "Formato no permitido"
+                })
+                continue
+
+            # =========================
+            # 2. GUARDAR ARCHIVO
+            # =========================
+            ruta = os.path.join(
+                "uploads",
+                "facturas",
+                f"{current_user.id}_{archivo.filename}"
+            )
+
+            with open(ruta, "wb") as buffer:
+                shutil.copyfileobj(archivo.file, buffer)
+
+            # =========================
+            # 3. OCR
+            # =========================
+            texto = ocr_service.extraer_texto(ruta)
+
+            numero = extraer_numero_factura(texto)
+            nit = extraer_nit(texto)
+            total_raw = extraer_total(texto)
+
+            # =========================
+            # 4. NORMALIZAR TOTAL
+            # =========================
+            try:
+                total = float(
+                    str(total_raw)
+                    .replace("Q", "")
+                    .replace(",", "")
+                    .strip()
+                )
+            except:
+                total = 0.0
+
+            subtotal = round(total * 0.9, 2)
+            impuestos = round(total * 0.1, 2)
+
+            # =========================
+            # 5. CREAR FACTURA
+            # =========================
+            factura = Factura(
+                numero_factura=numero or "SIN_NUMERO",
+                nit=nit or "SIN_NIT",
+                subtotal=subtotal,
+                impuestos=impuestos,
+                total=total,
+                estado="Procesado",
+                archivo=ruta,
+                proveedor_id=1,
+                usuario_id=current_user.id
+            )
+
+            db.add(factura)
+            db.commit()
+            db.refresh(factura)
+
+            # =========================
+            # 6. BITÁCORA
+            # =========================
+            bitacora_service.registrar(
+                db=db,
+                accion="RPA_BATCH",
+                descripcion=f"Factura creada desde lote: {archivo.filename}",
+                factura_id=factura.id,
+                usuario_id=current_user.id
+            )
+
+            resultados.append({
+                "archivo": archivo.filename,
+                "factura_id": factura.id,
+                "estado": "OK"
+            })
+
+        except Exception as e:
+
+            resultados.append({
+                "archivo": archivo.filename,
+                "estado": "ERROR",
+                "error": str(e)
+            })
+
+    return {
+        "message": "Proceso batch completado",
+        "total": len(resultados),
+        "resultados": resultados
+    }

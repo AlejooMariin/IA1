@@ -1,11 +1,12 @@
 import { useEffect, useState } from "react";
 import api from "../services/api";
-import { 
+import {
     FiUpload,
     FiCpu,
     FiFileText,
     FiX,
-    FiLoader
+    FiLoader,
+    FiLayers
 } from "react-icons/fi";
 
 export default function Facturas() {
@@ -13,6 +14,10 @@ export default function Facturas() {
     const [facturas, setFacturas] = useState([]);
     const [selectedFactura, setSelectedFactura] = useState(null);
     const [selectedFile, setSelectedFile] = useState(null);
+
+    // 🔥 NUEVO: batch mode
+    const [modoBatch, setModoBatch] = useState(false);
+    const [selectedFiles, setSelectedFiles] = useState([]);
 
     const [loading, setLoading] = useState(false);
 
@@ -31,10 +36,12 @@ export default function Facturas() {
         setFacturas(res.data);
     };
 
-
+    // =========================
+    // UPLOAD NORMAL
+    // =========================
     const upload = async () => {
 
-        if (!selectedFactura || !selectedFile) return;
+        if (!selectedFile) return;
 
         try {
             setLoading(true);
@@ -57,7 +64,9 @@ export default function Facturas() {
         }
     };
 
-
+    // =========================
+    // OCR NORMAL
+    // =========================
     const procesarYCrear = async () => {
 
         if (!selectedFactura) return;
@@ -86,45 +95,117 @@ export default function Facturas() {
         }
     };
 
+    // =========================
+    // RPA BATCH
+    // =========================
+    const procesarBatch = async () => {
+
+        if (!selectedFiles.length) return;
+
+        try {
+            setLoading(true);
+
+            const formData = new FormData();
+
+            for (let file of selectedFiles) {
+                formData.append("archivos", file);
+            }
+
+            const res = await api.post("/facturas/rpa/batch-crear", formData);
+
+            setModal({
+                show: true,
+                title: "Batch completado",
+                message: JSON.stringify(res.data.resultados, null, 2)
+            });
+
+            load();
+
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div style={{ padding: 20 }}>
 
-            <h1> <FiFileText style={{ marginRight: 6 }} />
-                 Facturas</h1>
+            <h1>
+                <FiFileText style={{ marginRight: 6 }} />
+                Facturas
+            </h1>
 
-            {/* PANEL ACCIONES */}
+            {/* =========================
+                PANEL ACCIONES
+            ========================= */}
             <div style={{
                 background: "#f3f4f6",
                 padding: 10,
                 marginBottom: 20
             }}>
 
-                <select
-                    onChange={(e) => setSelectedFactura(e.target.value)}
-                >
-                    <option value="">Seleccionar factura</option>
+                {/* SWITCH BATCH */}
+                <label style={{ marginRight: 10 }}>
+                    <input
+                        type="checkbox"
+                        checked={modoBatch}
+                        onChange={(e) => setModoBatch(e.target.checked)}
+                    />
+                    <FiLayers style={{ marginLeft: 5, marginRight: 5 }} />
+                    Modo Batch (RPA)
+                </label>
 
-                    {facturas.map(f => (
-                        <option key={f.id} value={f.id}>
-                            Factura #{f.id}
-                        </option>
-                    ))}
-                </select>
+                {/* =========================
+                    MODO NORMAL
+                ========================= */}
+                {!modoBatch && (
+                    <>
+                        <select
+                            onChange={(e) => setSelectedFactura(e.target.value)}
+                        >
+                            <option value="">Seleccionar factura</option>
+                            {facturas.map(f => (
+                                <option key={f.id} value={f.id}>
+                                    Factura #{f.id}
+                                </option>
+                            ))}
+                        </select>
 
-                <input
-                    type="file"
-                    onChange={(e) => setSelectedFile(e.target.files[0])}
-                />
+                        <input
+                            type="file"
+                            onChange={(e) => setSelectedFile(e.target.files[0])}
+                        />
 
-                <button onClick={upload} disabled={loading}>
-                    <FiUpload style={{ marginRight: 5 }} />
-                     Upload
-                </button>
+                        <button onClick={upload} disabled={loading}>
+                            <FiUpload style={{ marginRight: 5 }} />
+                            Upload
+                        </button>
 
-                <button onClick={procesarYCrear} disabled={loading}>
-                    <FiCpu style={{ marginRight: 5 }} />
-                     OCR + Crear
-                </button>
+                        <button onClick={procesarYCrear} disabled={loading}>
+                            <FiCpu style={{ marginRight: 5 }} />
+                            OCR + Crear
+                        </button>
+                    </>
+                )}
+
+                {/* =========================
+                    MODO BATCH
+                ========================= */}
+                {modoBatch && (
+                    <>
+                        <input
+                            type="file"
+                            multiple
+                            onChange={(e) =>
+                                setSelectedFiles(Array.from(e.target.files))
+                            }
+                        />
+
+                        <button onClick={procesarBatch} disabled={loading}>
+                            <FiLayers style={{ marginRight: 5 }} />
+                            Procesar Lote
+                        </button>
+                    </>
+                )}
 
             </div>
 
@@ -152,25 +233,25 @@ export default function Facturas() {
 
                     <div style={{
                         background: "white",
-                        padding: 20
+                        padding: 20,
+                        maxWidth: 500
                     }}>
 
                         <h3>{modal.title}</h3>
-                        <pre>{modal.message}</pre>
+                        <pre style={{ whiteSpace: "pre-wrap" }}>
+                            {modal.message}
+                        </pre>
 
                         <button
                             onClick={() =>
                                 setModal({ ...modal, show: false })
                             }
                         >
-                            <>
-                                <FiX style={{ marginRight: 5 }} />
-                                Cerrar
-                            </>
+                            <FiX style={{ marginRight: 5 }} />
+                            Cerrar
                         </button>
 
                     </div>
-
                 </div>
             )}
 
