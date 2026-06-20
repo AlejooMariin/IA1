@@ -1,0 +1,137 @@
+import re
+from app.services.notification_service import notificar
+ARCHIVO = "base_prolog/diagnostico.pl"
+ARCHIVOAUX = "base_prolog/auxiliar.pl"
+
+
+def get_fallas_service():
+
+    contenido = ""
+
+    with open(
+        ARCHIVO,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+
+        contenido += archivo.read()
+
+    with open(
+        ARCHIVOAUX,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+
+        contenido += "\n" + archivo.read()
+
+    fallas = re.findall(
+        r"falla\((.*?)\)\.",
+        contenido
+    )
+
+    return list(
+        dict.fromkeys(fallas)
+    )
+
+
+def crear_falla_service(
+    nombre
+):
+
+    with open(
+        ARCHIVO,
+        "a",
+        encoding="utf-8"
+    ) as archivo:
+
+        archivo.write(
+            f"\nfalla({nombre}).\n"
+        )
+    
+    notificar(
+        "Crear Falla",
+        nombre
+    )
+
+    return {
+        "mensaje":
+        "Falla creada"
+    }
+
+
+def eliminar_falla_service(
+    nombre
+):
+
+    with open(
+        ARCHIVO,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+
+        lineas = archivo.readlines()
+
+    with open(
+        ARCHIVO,
+        "w",
+        encoding="utf-8"
+    ) as archivo:
+
+        for linea in lineas:
+
+            if (
+                f"falla({nombre})."
+                not in linea
+            ):
+                archivo.write(
+                    linea
+                )
+
+    notificar(
+        "Eliminar Falla",
+        nombre
+    )
+
+    return {
+        "mensaje":
+        "Falla eliminada"
+    }
+
+
+def actualizar_falla_service(
+    anterior,
+    nuevo
+):
+
+    with open(
+        ARCHIVO,
+        "r",
+        encoding="utf-8"
+    ) as archivo:
+
+        contenido = archivo.read()
+
+    contenido = contenido.replace(
+        f"falla({anterior}).",
+        f"falla({nuevo})."
+    )
+
+    with open(
+        ARCHIVO,
+        "w",
+        encoding="utf-8"
+    ) as archivo:
+
+        archivo.write(
+            contenido
+        )
+
+    notificar(
+        "Actualizar Falla",
+        f"{anterior} → {nuevo}"
+    )
+
+    return {
+        "mensaje":
+        "Falla actualizada"
+    }

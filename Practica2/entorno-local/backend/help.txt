@@ -1,0 +1,15 @@
+crear entorno
+python -m venv venv
+
+
+activar 
+venv\Scripts\activate
+
+instalar 
+pip install fastapi
+pip install uvicorn
+pip install sqlalchemy
+pip install pymysql
+pip install python-multipart
+
+pip install -r requirements.txt
