@@ -1,21 +1,42 @@
+version: "3.9"
+
 services:
 
   mysql:
     image: mysql:8.0
-
     container_name: smartinvoice-mysql
-
     restart: always
-
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: smartinvoice
-
     ports:
       - "3307:3306"
-
     volumes:
       - mysql_data:/var/lib/mysql
+
+  backend:
+    build: ./backend
+    container_name: smartinvoice-backend
+    restart: always
+    ports:
+      - "8000:8000"
+    depends_on:
+      - mysql
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASSWORD: root
+      DB_NAME: smartinvoice
+
+  frontend:
+    build: ./frontend
+    container_name: smartinvoice-frontend
+    restart: always
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
 
 volumes:
   mysql_data:
