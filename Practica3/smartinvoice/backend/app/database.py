@@ -1,12 +1,11 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker, declarative_base
 
 from app.config import DATABASE_URL
 
-engine = create_engine(
-    DATABASE_URL,
-    pool_pre_ping=True
-)
+engine = create_engine(DATABASE_URL)
+
+print("DATABASE_URL =", DATABASE_URL)
 
 SessionLocal = sessionmaker(
     autocommit=False,
