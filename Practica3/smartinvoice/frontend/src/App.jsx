@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Facturas from "./pages/Facturas";
 import Bitacora from "./pages/Bitacora";
+import Proveedores from "./pages/Proveedores";
 
 import Navbar from "./components/Navbar";
 
@@ -35,6 +36,13 @@ export default function App() {
                     <PrivateRoute>
                         <Navbar />
                         <Facturas />
+                    </PrivateRoute>
+                } />
+
+                <Route path="/proveedores" element={
+                    <PrivateRoute>
+                        <Navbar />
+                        <Proveedores />
                     </PrivateRoute>
                 } />
 

@@ -19,7 +19,7 @@ export default function Navbar() {
                 <Link to="/dashboard" style={styles.link}>Dashboard</Link>
 
                 <Link to="/facturas" style={styles.link}>Facturas</Link>
-
+                <Link to="/proveedores" style={styles.link}>Proveedores</Link>
                 <Link to="/bitacora" style={styles.link}>Bitácora</Link>
 
             </div>
