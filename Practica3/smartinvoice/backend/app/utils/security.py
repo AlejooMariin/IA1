@@ -16,8 +16,9 @@ import bcrypt
 print("BCRYPT MODULE:", bcrypt)
 print("BCRYPT VERSION:", getattr(bcrypt, "__version__", "NO VERSION"))
 
+
 pwd_context = CryptContext(
-    schemes=["bcrypt"],
+    schemes=["pbkdf2_sha256"],
     deprecated="auto"
 )
 
