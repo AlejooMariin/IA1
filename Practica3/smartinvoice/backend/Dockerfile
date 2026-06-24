@@ -12,6 +12,10 @@ COPY requirements.txt .
 
 RUN pip install --no-cache-dir -r requirements.txt
 
+RUN pip show bcrypt
+
+RUN pip show passlib
+
 COPY . .
 
 EXPOSE 8000
