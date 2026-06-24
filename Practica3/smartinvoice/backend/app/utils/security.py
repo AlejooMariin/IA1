@@ -7,6 +7,15 @@ from passlib.context import CryptContext
 from app.config import SECRET_KEY
 from app.config import ALGORITHM
 
+import bcrypt
+
+print("BCRYPT VERSION:", bcrypt.__version__)
+
+import bcrypt
+
+print("BCRYPT MODULE:", bcrypt)
+print("BCRYPT VERSION:", getattr(bcrypt, "__version__", "NO VERSION"))
+
 pwd_context = CryptContext(
     schemes=["bcrypt"],
     deprecated="auto"
