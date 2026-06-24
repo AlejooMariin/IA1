@@ -9,6 +9,11 @@ DATABASE_URL = (
     f"{DB_USER}:{DB_PASSWORD}"
     f"@{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
+print("DB_USER:", DB_USER)
+print("DB_HOST:", DB_HOST)
+print("DB_PORT:", DB_PORT)
+print("DB_NAME:", DB_NAME)
+print("DATABASE_URL:", DATABASE_URL)
 
 engine = create_engine(DATABASE_URL)
 
