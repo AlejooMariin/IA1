@@ -26,7 +26,7 @@ app = FastAPI(
 origins = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
-    "https://tu-proyecto.vercel.app"
+    "https://ia-1-git-feature-practica3-deploy-alejo97.vercel.app"
 ]
 
 app.add_middleware(
