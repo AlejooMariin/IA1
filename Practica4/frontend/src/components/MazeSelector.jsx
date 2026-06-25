@@ -1,6 +1,6 @@
 import { mazes } from "../data/mazes";
 
-function MazeSelector({ setMaze }) {
+function MazeSelector({ setMaze, cleanResults}) {
 
     const loadMaze = (name) => {
 
@@ -10,6 +10,7 @@ function MazeSelector({ setMaze }) {
             );
 
         setMaze(selected);
+        cleanResults();
     };
 
     return (

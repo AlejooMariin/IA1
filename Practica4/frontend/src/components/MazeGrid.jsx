@@ -9,35 +9,77 @@ function MazeGrid({
     setGoal
 }) {
 
+    const currentNode =
+        path.length > 0
+            ? path[path.length - 1]
+            : null;
+
     const handleClick = (
-        row,
-        col
-    ) => {
+            row,
+            col
+        ) => {
 
-        if(editMode === "start"){
+            if(editMode === "start"){
 
-            setStart([row,col]);
-            return;
-        }
+                if(
+                    maze[row][col] === 1
+                ){
+                    return;
+                }
 
-        if(editMode === "goal"){
+                setStart([
+                    row,
+                    col
+                ]);
 
-            setGoal([row,col]);
-            return;
-        }
+                return;
+            }
 
-        const newMaze =
-            maze.map(
-                r => [...r]
-            );
+            if(editMode === "goal"){
 
-        newMaze[row][col] =
-            newMaze[row][col] === 0
-                ? 1
-                : 0;
+                if(
+                    maze[row][col] === 1
+                ){
+                    return;
+                }
 
-        setMaze(newMaze);
-    };
+                setGoal([
+                    row,
+                    col
+                ]);
+
+                return;
+            }
+
+            if(editMode === "wall"){
+
+                if(
+                    row === start[0] &&
+                    col === start[1]
+                ){
+                    return;
+                }
+
+                if(
+                    row === goal[0] &&
+                    col === goal[1]
+                ){
+                    return;
+                }
+
+                const newMaze =
+                    maze.map(
+                        r => [...r]
+                    );
+
+                newMaze[row][col] =
+                    newMaze[row][col] === 0
+                        ? 1
+                        : 0;
+
+                setMaze(newMaze);
+            }
+        };
 
     return (
 
@@ -59,10 +101,6 @@ function MazeGrid({
                                         let color =
                                             "white";
 
-                                        if(cell === 1)
-                                            color =
-                                            "black";
-
                                         const isPath =
                                             path.some(
                                                 ([r,c]) =>
@@ -70,31 +108,54 @@ function MazeGrid({
                                                     c === colIndex
                                             );
 
-                                        if(isPath)
-                                            color =
-                                            "yellow";
+                                        const isRobot =
+
+                                            currentNode &&
+
+                                            currentNode[0] === rowIndex &&
+
+                                            currentNode[1] === colIndex;
+
+                                        if(cell === 1){
+
+                                            color = "#212121";
+                                        }
+
+                                        if(isPath){
+
+                                            color = "#FFD54F";
+                                        }
 
                                         if(
                                             rowIndex === start[0] &&
                                             colIndex === start[1]
                                         ){
-                                            color =
-                                            "green";
+
+                                            color = "#4CAF50";
                                         }
 
                                         if(
                                             rowIndex === goal[0] &&
                                             colIndex === goal[1]
                                         ){
-                                            color =
-                                            "red";
+
+                                            color = "#F44336";
+                                        }
+
+                                        if(isRobot){
+
+                                            color = "#2196F3";
                                         }
 
                                         return (
 
                                             <div
                                                 key={colIndex}
-                                                className="cell"
+                                                className={
+                                                    isPath
+                                                        ? "cell path-cell"
+                                                        : "cell"
+                                                }
                                                 style={{
                                                     backgroundColor:
                                                         color

@@ -44,3 +44,78 @@ th,
 td{
     padding:10px;
 }
+
+.maze-row{
+    display:flex;
+}
+
+.cell{
+
+    width:45px;
+    height:45px;
+
+    border:1px solid #d6d6d6;
+
+    cursor:pointer;
+
+    transition:
+        background-color 0.2s ease;
+}
+
+.path-cell{
+
+    animation:
+        snakeMove
+        0.25s ease;
+}
+
+@keyframes snakeMove{
+
+    from{
+
+        transform:scale(0.1);
+
+        opacity:0;
+    }
+
+    to{
+
+        transform:scale(1);
+
+        opacity:1;
+    }
+}
+
+.speed-control{
+
+    display:flex;
+    gap:10px;
+
+    align-items:center;
+}
+
+.config-panel{
+
+    border:1px solid #ddd;
+
+    padding:20px;
+
+    margin-bottom:20px;
+
+    border-radius:10px;
+
+    display:flex;
+
+    flex-direction:column;
+
+    gap:10px;
+
+    width:350px;
+}
+
+.config-panel input{
+
+    width:70px;
+
+    margin-left:10px;
+}

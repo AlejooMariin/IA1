@@ -2,51 +2,82 @@ function Controls({
     editMode,
     setEditMode,
     runBFS,
-    runDFS
+    runDFS,
+    clearPath,
+    clearMaze
 }) {
 
     return (
 
-        <div>
+        <div className="controls">
 
-            <h3>Modo Edición</h3>
+            <h3>Modo edición</h3>
 
             <button
+                className={
+                    editMode === "wall"
+                        ? "active"
+                        : ""
+                }
                 onClick={() =>
                     setEditMode("wall")
                 }
             >
-                Obstáculo
+                🧱 Obstáculo
             </button>
 
             <button
+                className={
+                    editMode === "start"
+                        ? "active"
+                        : ""
+                }
                 onClick={() =>
                     setEditMode("start")
                 }
             >
-                Inicio
+                🟩 Inicio
             </button>
 
             <button
+                className={
+                    editMode === "goal"
+                        ? "active"
+                        : ""
+                }
                 onClick={() =>
                     setEditMode("goal")
                 }
             >
-                Meta
+                🟥 Meta
             </button>
 
-            <hr/>
+            <hr />
 
-            <button onClick={runBFS}>
-                Ejecutar BFS
+            <button
+                onClick={runBFS}
+            >
+                BFS
             </button>
 
-            <button onClick={runDFS}>
-                Ejecutar DFS
+            <button
+                onClick={runDFS}
+            >
+                DFS
+            </button>
+            <button
+                onClick={clearPath}
+            >
+                🧹 Limpiar Ruta
+            </button>
+
+            <button
+                onClick={clearMaze}
+            >
+                🗑️ Limpiar Laberinto
             </button>
 
         </div>
-
     );
 }
 
