@@ -1,54 +1,85 @@
+import {
+    FaClock,
+    FaRoute,
+    FaSearch
+} from "react-icons/fa";
+
 function Results({ result }) {
 
     if (!result) return null;
 
     return (
 
-        <div className="results">
+        <div className="results-card">
 
             <h2>
                 Resultado
             </h2>
 
-            <p>
-                Nodos explorados:
-                {" "}
-                {result.nodes_explored}
-            </p>
+            <div className="stats-grid">
 
-            <p>
-                Tiempo:
-                {" "}
-                {result.execution_time}
-                {" "}segundos
-            </p>
+                <div className="stat-box">
 
-            <p>
-                Longitud ruta:
-                {" "}
-                {result.path.length}
-            </p>
+                    <FaSearch />
 
-            <h3>
-                Ruta encontrada
-            </h3>
+                    <h3>
+                        {result.nodes_explored}
+                    </h3>
 
-            <ul>
+                    <p>
+                        Nodos
+                    </p>
 
-                {
-                    result.path.map(
-                        (node, index) => (
+                </div>
 
-                            <li key={index}>
-                                ({node[0]},
-                                {node[1]})
-                            </li>
+                <div className="stat-box">
 
+                    <FaClock />
+
+                    <h3>
+                        {result.execution_time}
+                    </h3>
+
+                    <p>
+                        Segundos
+                    </p>
+
+                </div>
+
+                <div className="stat-box">
+
+                    <FaRoute />
+
+                    <h3>
+                        {result.path.length}
+                    </h3>
+
+                    <p>
+                        Ruta
+                    </p>
+
+                </div>
+
+            </div>
+
+            <div className="path-container">
+
+                    {
+                        result.path.map(
+                            (node,index)=>(
+
+                                <span
+                                    key={index}
+                                    className="path-node"
+                                >
+                                    ({node[0]},{node[1]})
+                                </span>
+
+                            )
                         )
-                    )
-                }
+                    }
 
-            </ul>
+            </div>
 
         </div>
 

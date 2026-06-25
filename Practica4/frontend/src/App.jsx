@@ -215,28 +215,51 @@ function App() {
         clearPath();
     };
 
+    const resetMazeConfig = () => {
+
+        setMaze(
+            mazes.maze1.map(
+                row => [...row]
+            )
+        );
+
+        setStart([0,0]);
+
+        setGoal([
+            mazes.maze1.length - 1,
+            mazes.maze1[0].length - 1
+        ]);
+
+        clearPath();
+    };
+
     return (
 
         <div className="container">
 
             <h1>🤖 RoboMaze</h1>
-            <MazeConfig
-                createMaze={createMaze}
-            />
 
-            <MazeSelector
-                cleanResults={cleanResults}
-                setMaze={setMaze}
-            />
+            <div className="top-panel">
 
-            <Controls
-                editMode={editMode}
-                setEditMode={setEditMode}
-                runBFS={runBFS}
-                runDFS={runDFS}
-                clearPath={clearPath}
-                clearMaze={clearMaze}
-            />
+              <MazeConfig
+                  createMaze={createMaze}
+                  resetMazeConfig={resetMazeConfig}
+              />
+              <MazeSelector
+                  cleanResults={cleanResults}
+                  setMaze={setMaze}
+              />
+
+              <Controls
+                  editMode={editMode}
+                  setEditMode={setEditMode}
+                  runBFS={runBFS}
+                  runDFS={runDFS}
+                  clearPath={clearPath}
+                  clearMaze={clearMaze}
+              />
+
+          </div>
 
             <div className="speed-control">
 

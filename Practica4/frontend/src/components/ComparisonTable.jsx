@@ -5,54 +5,58 @@ function ComparisonTable({
 
     return (
 
-        <table border="1">
+        <div className="comparison-container">
 
-            <thead>
-                <tr>
-                    <th>Algoritmo</th>
-                    <th>Nodos</th>
-                    <th>Tiempo</th>
-                    <th>Ruta</th>
-                </tr>
-            </thead>
+            <div className="algo-card">
 
-            <tbody>
+                <h3>BFS</h3>
 
-                <tr>
-                    <td>BFS</td>
+                <p>
+                    Nodos:
+                    {" "}
+                    {bfsResult?.nodes_explored ?? "-"}
+                </p>
 
-                    <td>
-                        {bfsResult?.nodes_explored || "-"}
-                    </td>
+                <p>
+                    Tiempo:
+                    {" "}
+                    {bfsResult?.execution_time ?? "-"}
+                </p>
 
-                    <td>
-                        {bfsResult?.execution_time || "-"}
-                    </td>
+                <p>
+                    Ruta:
+                    {" "}
+                    {bfsResult?.path?.length ?? "-"}
+                </p>
 
-                    <td>
-                        {bfsResult?.path?.length || "-"}
-                    </td>
-                </tr>
+            </div>
 
-                <tr>
-                    <td>DFS</td>
+            <div className="algo-card">
 
-                    <td>
-                        {dfsResult?.nodes_explored || "-"}
-                    </td>
+                <h3>DFS</h3>
 
-                    <td>
-                        {dfsResult?.execution_time || "-"}
-                    </td>
+                <p>
+                    Nodos:
+                    {" "}
+                    {dfsResult?.nodes_explored ?? "-"}
+                </p>
 
-                    <td>
-                        {dfsResult?.path?.length || "-"}
-                    </td>
-                </tr>
+                <p>
+                    Tiempo:
+                    {" "}
+                    {dfsResult?.execution_time ?? "-"}
+                </p>
 
-            </tbody>
+                <p>
+                    Ruta:
+                    {" "}
+                    {dfsResult?.path?.length ?? "-"}
+                </p>
 
-        </table>
+            </div>
+
+        </div>
+
     );
 }
 

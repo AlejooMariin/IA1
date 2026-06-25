@@ -1,8 +1,17 @@
+import {
+    FaMap
+} from "react-icons/fa";
+
 import { mazes } from "../data/mazes";
 
-function MazeSelector({ setMaze, cleanResults}) {
+function MazeSelector({
+    setMaze,
+    cleanResults
+}) {
 
     const loadMaze = (name) => {
+
+        if(!name) return;
 
         const selected =
             mazes[name].map(
@@ -10,44 +19,55 @@ function MazeSelector({ setMaze, cleanResults}) {
             );
 
         setMaze(selected);
+
         cleanResults();
     };
 
     return (
 
-        <select
-            onChange={(e) =>
-                loadMaze(
-                    e.target.value
-                )
-            }
-        >
+        <div className="card">
 
-            <option value="">
-                Seleccione laberinto
-            </option>
+            <h3>
+                Laberintos
+            </h3>
 
-            <option value="maze1">
-                Laberinto 1
-            </option>
+            <select
+                className="maze-select"
+                onChange={(e)=>
+                    loadMaze(
+                        e.target.value
+                    )
+                }
+            >
 
-            <option value="maze2">
-                Laberinto 2
-            </option>
+                <option value="">
+                    Seleccione
+                </option>
 
-            <option value="maze3">
-                Laberinto 3
-            </option>
+                <option value="maze1">
+                    Laberinto 1
+                </option>
 
-            <option value="maze4">
-                Laberinto 4
-            </option>
+                <option value="maze2">
+                    Laberinto 2
+                </option>
 
-            <option value="maze5">
-                Laberinto 5
-            </option>
+                <option value="maze3">
+                    Laberinto 3
+                </option>
 
-        </select>
+                <option value="maze4">
+                    Laberinto 4
+                </option>
+
+                <option value="maze5">
+                    Laberinto 5
+                </option>
+
+            </select>
+
+        </div>
+
     );
 }
 

@@ -1,7 +1,13 @@
 import { useState } from "react";
 
+import {
+    FaPlusCircle,
+    FaUndo
+} from "react-icons/fa";
+
 function MazeConfig({
-    createMaze
+    createMaze,
+    resetMazeConfig
 }) {
 
     const [rows,setRows] =
@@ -10,61 +16,89 @@ function MazeConfig({
     const [cols,setCols] =
         useState(5);
 
-    const handleCreate = () => {
+    const handleReset = () => {
 
-        createMaze(
-            rows,
-            cols
-        );
+        setRows(5);
+
+        setCols(5);
+
+        resetMazeConfig();
     };
 
     return (
 
-        <div className="config-panel">
+        <div className="card">
 
-            <h2>
+            <h3>
                 Nuevo Laberinto
-            </h2>
+            </h3>
 
-            <label>
-                Filas
-            </label>
+            <div className="input-group">
 
-            <input
-                type="number"
-                min="2"
-                value={rows}
-                onChange={(e)=>
-                    setRows(
-                        Number(
-                            e.target.value
+                <label>
+                    Filas
+                </label>
+
+                <input
+                    type="number"
+                    min="2"
+                    value={rows}
+                    onChange={(e)=>
+                        setRows(
+                            Number(
+                                e.target.value
+                            )
                         )
-                    )
-                }
-            />
+                    }
+                />
 
-            <label>
-                Columnas
-            </label>
+            </div>
 
-            <input
-                type="number"
-                min="2"
-                value={cols}
-                onChange={(e)=>
-                    setCols(
-                        Number(
-                            e.target.value
+            <div className="input-group">
+
+                <label>
+                    Columnas
+                </label>
+
+                <input
+                    type="number"
+                    min="2"
+                    value={cols}
+                    onChange={(e)=>
+                        setCols(
+                            Number(
+                                e.target.value
+                            )
                         )
-                    )
-                }
-            />
+                    }
+                />
 
-            <button
-                onClick={handleCreate}
-            >
-                Crear Laberinto
-            </button>
+            </div>
+
+            <div className="config-buttons">
+
+                <button
+                    className="btn btn-success"
+                    onClick={() =>
+                        createMaze(
+                            rows,
+                            cols
+                        )
+                    }
+                >
+                    <FaPlusCircle />
+                    Crear
+                </button>
+
+                <button
+                    className="btn btn-warning"
+                    onClick={handleReset}
+                >
+                    <FaUndo />
+                    Reset
+                </button>
+
+            </div>
 
         </div>
     );

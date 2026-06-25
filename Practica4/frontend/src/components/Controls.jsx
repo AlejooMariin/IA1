@@ -1,3 +1,12 @@
+import {
+    FaPlay,
+    FaTrash,
+    FaBroom,
+    FaMapMarkerAlt,
+    FaFlag,
+    FaSquare
+} from "react-icons/fa";
+
 function Controls({
     editMode,
     setEditMode,
@@ -9,75 +18,112 @@ function Controls({
 
     return (
 
-        <div className="controls">
+        <div className="card">
 
-            <h3>Modo edición</h3>
+            <h3 className="section-title">
+                Modo Edición
+            </h3>
 
-            <button
-                className={
-                    editMode === "wall"
-                        ? "active"
-                        : ""
-                }
-                onClick={() =>
-                    setEditMode("wall")
-                }
-            >
-                🧱 Obstáculo
-            </button>
+            <div className="controls-grid">
 
-            <button
-                className={
-                    editMode === "start"
-                        ? "active"
-                        : ""
-                }
-                onClick={() =>
-                    setEditMode("start")
-                }
-            >
-                🟩 Inicio
-            </button>
+                <button
+                    className={
+                        editMode === "wall"
+                            ? "btn btn-active"
+                            : "btn"
+                    }
+                    onClick={() =>
+                        setEditMode("wall")
+                    }
+                >
+                    <FaSquare />
+                    Obstáculo
+                </button>
 
-            <button
-                className={
-                    editMode === "goal"
-                        ? "active"
-                        : ""
-                }
-                onClick={() =>
-                    setEditMode("goal")
-                }
-            >
-                🟥 Meta
-            </button>
+                <button
+                    className={
+                        editMode === "start"
+                            ? "btn btn-active"
+                            : "btn"
+                    }
+                    onClick={() =>
+                        setEditMode("start")
+                    }
+                >
+                    <FaMapMarkerAlt />
+                    Inicio
+                </button>
+
+                <button
+                    className={
+                        editMode === "goal"
+                            ? "btn btn-active"
+                            : "btn"
+                    }
+                    onClick={() =>
+                        setEditMode("goal")
+                    }
+                >
+                    <FaFlag />
+                    Meta
+                </button>
+
+            </div>
 
             <hr />
 
-            <button
-                onClick={runBFS}
-            >
-                BFS
-            </button>
+            <h3 className="section-title">
+                Algoritmos
+            </h3>
 
-            <button
-                onClick={runDFS}
-            >
-                DFS
-            </button>
-            <button
-                onClick={clearPath}
-            >
-                🧹 Limpiar Ruta
-            </button>
+            <div className="controls-grid">
 
-            <button
-                onClick={clearMaze}
-            >
-                🗑️ Limpiar Laberinto
-            </button>
+                <button
+                    className="btn btn-success"
+                    onClick={runBFS}
+                >
+                    <FaPlay />
+                    BFS
+                </button>
+
+                <button
+                    className="btn btn-success"
+                    onClick={runDFS}
+                >
+                    <FaPlay />
+                    DFS
+                </button>
+
+            </div>
+
+            <hr />
+
+            <h3 className="section-title">
+                Utilidades
+            </h3>
+
+            <div className="controls-grid">
+
+                <button
+                    className="btn btn-warning"
+                    onClick={clearPath}
+                >
+                    <FaBroom />
+                    Limpiar Ruta
+                </button>
+
+                <button
+                    className="btn btn-danger"
+                    onClick={clearMaze}
+                >
+                    <FaTrash />
+                    Limpiar Laberinto
+                </button>
+
+            </div>
 
         </div>
+
     );
 }
 
